@@ -26,6 +26,13 @@ class HospitalsScraper(scrapy.Spider):
         street = response.xpath('//span[@itemprop="streetAddress"]/text()').extract_first()
         postal_code = response.xpath('//span[@itemprop="postalCode"]/text()').extract_first()
         city = response.xpath('//span[@itemprop="addressLocality"]/text()').extract_first()
+        if hospital_name is None or \
+                street is None or \
+                postal_code is None or \
+                city is None:
+            raise ValueError('None found in: {}, {}, {}, {}'.format(
+                hospital_name, street, postal_code, city
+            ))
         address = '{}, {} {}'.format(street, postal_code, city)
         yield {
             'name': hospital_name,
